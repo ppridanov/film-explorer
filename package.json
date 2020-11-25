@@ -23,5 +23,13 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ppridanov/film-explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ppridanov/film-explorer/issues"
+  },
+  "homepage": "https://github.com/ppridanov/film-explorer#readme"
 }
