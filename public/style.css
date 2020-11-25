@@ -1,0 +1,14 @@
+body {
+  max-width: 1440px;
+  margin: auto;
+}
+.genres ul {
+    list-style-type: none;
+  -moz-column-count: 3; /* Firefox */
+  -webkit-column-count: 3; /* Safari and Chrome */
+  column-count: 3;
+  height: auto;
+}
+.card-columns {
+    column-count: 3 !important;
+}
