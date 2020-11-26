@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <%- include ('partials/head'); %>
+</head>
+
+<body class="text-center">
+    <div class="page">
+        <% if (isAuth) { %>
+        <%- include ('partials/header', {title: title, name: name}); %>
+        <% } else { %>
+        <%- include ('partials/header', {title: title}); %>
+        <% } %>
+        <% if (title.includes('HomePage')) { %>
+        <%- include ('index', {title: title}); %>
+        <% } %>
+    </div>
+</body>
+
+</html>

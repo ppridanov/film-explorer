@@ -1,6 +1,6 @@
 body {
   max-width: 1440px;
-  margin: auto;
+  margin: auto !important;
 }
 .genres ul {
     list-style-type: none;
@@ -9,6 +9,9 @@ body {
   column-count: 3;
   height: auto;
 }
-.card-columns {
-    column-count: 3 !important;
+
+a:hover {
+  color: inherit !important;
+  text-decoration: none !important;
 }
+
