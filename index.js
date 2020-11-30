@@ -14,7 +14,7 @@ require('dotenv').config();
 const { PORT = 3000 } = process.env;
 const app = express();
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());

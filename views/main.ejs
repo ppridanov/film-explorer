@@ -2,18 +2,17 @@
 <html lang="en">
 
 <head>
-    <%- include ('partials/head'); %>
+    <%- include ('partials/head', {title: data.title}); %>
 </head>
 
 <body class="text-center">
     <div class="page">
-        <% if (isAuth) { %>
-        <%- include ('partials/header', {title: title, name: name}); %>
-        <% } else { %>
-        <%- include ('partials/header', {title: title}); %>
+        <%- include ('partials/header', {data: data.nav}); %>
+        <% if (data.title.includes('HomePage')) { %>
+        <%- include ('index', {data: data}); %>
         <% } %>
-        <% if (title.includes('HomePage')) { %>
-        <%- include ('index', {title: title}); %>
+        <% if (data.title.includes('category')) { %>
+        <%- include ('category', {data: data}); %>
         <% } %>
     </div>
 </body>

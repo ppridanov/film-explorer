@@ -1,8 +1,11 @@
 // Переменные
-const Film = require('../models/film');
-const NotFoundError = require('../errors/not-found-error');
-const AccessError = require('../errors/access-error');
-const { notFoundIdMsg, accessErrMsg } = require('../scripts/errors-success-msg');
+const Film = require("../models/film");
+const NotFoundError = require("../errors/not-found-error");
+const AccessError = require("../errors/access-error");
+const {
+  notFoundIdMsg,
+  accessErrMsg,
+} = require("../scripts/errors-success-msg");
 
 // Получаем все фильмы пользователя
 module.exports.getAllFilms = (req, res, next) => {
@@ -14,24 +17,19 @@ module.exports.getAllFilms = (req, res, next) => {
     .catch(next);
 };
 
-// Получаем все фильмы пользователя
-module.exports.getFilm = (req, res, next) => {
-  id = req.body.filmId;
-  Film.findOne({ _id: filmId })
-    .then((film) => {
-      res.send(film);
-    })
-    .catch(next);
-};
-
 // Создаем фильм
 module.exports.createFilm = (req, res, next) => {
-  const {
-    keyword, title, text, date, source, link, image,
-  } = req.body;
+  const { keyword, title, text, date, source, link, image } = req.body;
   const ownerId = req.user._id;
   Film.create({
-    keyword, title, text, date, source, link, image, owner: ownerId,
+    keyword,
+    title,
+    text,
+    date,
+    source,
+    link,
+    image,
+    owner: ownerId,
   })
     .then((film) => {
       res.send(film);
@@ -43,7 +41,8 @@ module.exports.createFilm = (req, res, next) => {
 module.exports.deleteFilm = (req, res, next) => {
   const { filmId } = req.params;
   const ownerId = req.user._id;
-  Film.findById(filmId).select('+owner')
+  Film.findById(filmId)
+    .select("+owner")
     .then((film) => {
       if (!film) {
         throw new NotFoundError(notFoundIdMsg);

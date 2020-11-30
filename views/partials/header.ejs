@@ -1,25 +1,30 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">MovieGenerator</a>
+    <a class="navbar-brand" href="/">MovieGenerator</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <% if (isAuth) { %>
+    <% if (data.isAuth) { %>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">My account</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/popular/films/1">Popular Films</a>
+            </li>
             <li>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Genres
-                    </button>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Genres</a>
+                    <%= data %>
                     <div class="dropdown-menu genres">
+                        <% data.forEach(el => { %>
+                        <a class="dropdown-item" href="/genres/<%= el.name %>"><%= el.name %></a>
+                        <% }) %>
                     </div>
                 </div>
             </li>
@@ -36,18 +41,23 @@
     <% } else { %>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/films/popular/1">Popular</a>
             </li>
             <li>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Genres
-                    </button>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Genres</a>
                     <div class="dropdown-menu genres">
-                        <ul class="genres-nav">
-
+                        <ul>
+                            <% data.forEach(element => { %>
+                            <li>
+                                <a class="dropdown-item" href="/genres/<%= element.name %>"><%= element.name %></a>
+                            </li>
+                            <% }) %>
                         </ul>
                     </div>
                 </div>

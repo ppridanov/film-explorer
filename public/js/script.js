@@ -83,7 +83,6 @@ function getGenres(data) {
       });
     });
 }
-getGenres({ apiKey: "be108878e83f4cfcd89e3a228bde78c9" });
 function getFilms(data) {
   fetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${data.apiKey}&language=en-US&page=1`,
@@ -152,4 +151,3 @@ function getFilms(data) {
     });
 }
 
-getFilms({ apiKey: "be108878e83f4cfcd89e3a228bde78c9" });
