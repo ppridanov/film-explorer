@@ -5,7 +5,7 @@ const auth = require('../middlewars/auth');
 const { newUserValidator, loginValidator } = require('../middlewars/validator');
 
 // Роуты пользователей
-router.get('/users/me', auth, getUser);
+router.get('/users/me', getUser);
 
 
 // Роуты регистрациии и входа

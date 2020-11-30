@@ -2,7 +2,6 @@ const NotFoundError = require("../errors/not-found-error");
 const AccessError = require("../errors/access-error");
 const { getData } = require('../middlewars/api');
 const { popularUrl } = require('../scripts/config');
-const myData = require("../")
 const {
   notFoundIdMsg,
   accessErrMsg,

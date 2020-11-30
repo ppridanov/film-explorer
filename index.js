@@ -9,7 +9,20 @@ const { requestLogger, errorLogger } = require('./middlewars/logger');
 const limiter = require('./middlewars/limiter');
 const { mongoUrl } = require('./scripts/config');
 const { errHandler, notFoundErrHandler } = require('./middlewars/error-handlers');
+const passport = require('passport');
 require('dotenv').config();
+
+const sessionMiddleware = session({
+  store: new RedisStore({client: redisClient}),
+  secret,
+  resave: true,
+  rolling: true,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 10 * 60 * 1000,
+    httpOnly: false,
+  },
+});
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -33,6 +46,9 @@ mongoose.connect(mongoUrl, {
 app.use(requestLogger);
 
 app.use(cookieParser());
+app.use(sessionMiddleware);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', require('./routes/main'));
 
 app.use(errorLogger);

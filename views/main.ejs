@@ -7,12 +7,16 @@
 
 <body class="text-center">
     <div class="page">
-        <%- include ('partials/header', {data: data.nav}); %>
+        <% console.log(data.userName) %>
+        <%- include ('partials/header', {data: { nav: data.nav, isAuth: data.isAuth, name: data.userName }}); %>
         <% if (data.title.includes('HomePage')) { %>
         <%- include ('index', {data: data}); %>
         <% } %>
         <% if (data.title.includes('category')) { %>
         <%- include ('category', {data: data}); %>
+        <% } %>
+        <% if (data.title.includes('Accout page')) { %>
+        <%- include ('user', {data: data}); %>
         <% } %>
     </div>
 </body>

@@ -14,16 +14,15 @@
                 <a class="nav-link" href="#">My account</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/popular/films/1">Popular Films</a>
+                <a class="nav-link" href="/films/popular/1">Popular Films</a>
             </li>
             <li>
                 <div class="btn-group">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                         aria-haspopup="true" aria-expanded="false">Genres</a>
-                    <%= data %>
                     <div class="dropdown-menu genres">
-                        <% data.forEach(el => { %>
-                        <a class="dropdown-item" href="/genres/<%= el.name %>"><%= el.name %></a>
+                        <% data.nav.forEach(el => { %>
+                        <a class="dropdown-item" href="/films/genre/<%= el.name.toLowerCase()  %>/1"><%= el.name %></a>
                         <% }) %>
                     </div>
                 </div>
@@ -34,7 +33,7 @@
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
         </form>
         <form class="form-inline my-1 my-lg-0" action="/logout" method="GET">
-            <a href="#" class="mb-0 mr-1 font-weight-normal">Welcome <%= name  %></a>
+            <a href="#" class="mb-0 mr-1 font-weight-normal">Welcome <%= data.name  %></a>
             <button class="ml-2 btn btn-outline-light my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </div>
@@ -42,7 +41,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/films/popular/1">Popular</a>
@@ -53,9 +52,9 @@
                         aria-haspopup="true" aria-expanded="false">Genres</a>
                     <div class="dropdown-menu genres">
                         <ul>
-                            <% data.forEach(element => { %>
+                            <% data.nav.forEach(element => { %>
                             <li>
-                                <a class="dropdown-item" href="/genres/<%= element.name %>"><%= element.name %></a>
+                                <a class="dropdown-item" href="/films/genre/<%= element.name.toLowerCase()  %>/1"><%= element.name %></a>
                             </li>
                             <% }) %>
                         </ul>
@@ -78,12 +77,12 @@
             <div class="modal-header">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab"
-                            aria-controls="signin" aria-selected="true">Login</a>
+                        <a class="nav-link active" id="signup-tab" data-toggle="tab" href="#signup" role="tab"
+                            aria-controls="signup" aria-selected="true">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="signup-tab" data-toggle="tab" href="#signup" role="tab"
-                            aria-controls="signup" aria-selected="false">Register</a>
+                        <a class="nav-link" id="signin-tab" data-toggle="tab" href="#signin" role="tab"
+                            aria-controls="signin" aria-selected="false">Login</a>
                     </li>
                 </ul>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -92,33 +91,8 @@
             </div>
             <div class="modal-body">
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                        <form>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                                <input id="email-input" type="email" class="form-control" id="exampleInputEmail1"
-                                    aria-describedby="emailHelp">
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email
-                                    with
-                                    anyone else.</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input id="password-input" type="password" class="form-control"
-                                    id="exampleInputPassword1">
-                            </div>
-                            <div class="form-group d-flex justify-content-center align-items-center">
-                                <div class="spinner-border text-primary waiting-spinner" style="display: none;"
-                                    role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                                <p class="flash-span"></p>
-                            </div>
-                            <button type="submit" id="signup-button" class="btn btn-danger btn-lg">Register</button>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
-                        <form>
+                    <div class="tab-pane fade show active" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+                        <form id="signupForm">
                             <div class="form-group">
                                 <label for="exampleInputName1">Name</label>
                                 <input id="username-input" type="email" class="form-control" id="exampleInputName1"
@@ -144,7 +118,32 @@
                                 </div>
                                 <p class="flash-span"></p>
                             </div>
-                            <button type="click" id="signin-button" class="btn btn-primary btn-lg">Login</button>
+                            <button type="click" id="signup-button" class="btn btn-primary btn-lg">Login</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                        <form id="signinForm">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input id="email-input" type="email" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp">
+                                <small id="emailHelp" class="form-text text-muted">We'll never share your email
+                                    with
+                                    anyone else.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input id="password-input" type="password" class="form-control"
+                                    id="exampleInputPassword1">
+                            </div>
+                            <div class="form-group d-flex justify-content-center align-items-center">
+                                <div class="spinner-border text-primary waiting-spinner" style="display: none;"
+                                    role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="flash-span"></p>
+                            </div>
+                            <button type="submit" id="signin-button" class="btn btn-danger btn-lg">Login</button>
                         </form>
                     </div>
                 </div>

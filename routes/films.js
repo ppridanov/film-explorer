@@ -21,11 +21,10 @@ router.use((req, res, next) => {
     req.data = {
         link: 'popular',
         name: 'Genre',
-        url: popularUrl,
     }
     next();
 })
-router.get('/films/genre/:page', getCategory);
+router.get('/films/genre/:genreName/:page', getCategory);
 router.post('/films', auth, filmCreateValidator, createFilm);
 router.delete('/films/:filmId', auth, deleteFilm);
 
