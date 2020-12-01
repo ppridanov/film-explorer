@@ -17,13 +17,13 @@
             <% return %>
             <% } %>
             <a class="col-lg-2 col-md-3 col-sm-4 col-xs-12 d-flex flex-column m-2 card justify-content-fs align-items-center"
-                href="https://localhost/film/<%= el.id %>"><img
+                href="http://localhost:3000/film/<%= el.id %>"><img
                     src="https://image.tmdb.org/t/p/w185<%= el.poster_path %>">
                 <p class="text-dark font-weight-bold mt-1 mb-0" style="min-height: 48px;"><%= el.original_title %></p>
                 <p class="text-secondary">
                     <% let overviewSliced = el.overview.slice(0, 50); %>
                     <% if (overviewSliced.length < el.overview.length) { %>
-                    <%= overviewSliced %>
+                    <%= overviewSliced + '..' %>
                     <% } %>
                 </p>
             </a>

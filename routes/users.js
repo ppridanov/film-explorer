@@ -1,15 +1,18 @@
 // Переменные
 const router = require('express').Router();
-const { getUser, createUser, login } = require('../controllers/users');
+const passport = require('passport');
+const { getUser, createUser, login, logout, getAccountPage } = require('../controllers/users');
 const auth = require('../middlewars/auth');
 const { newUserValidator, loginValidator } = require('../middlewars/validator');
 
+
 // Роуты пользователей
-router.get('/users/me', getUser);
+router.get('/users/me', getAccountPage);
 
 
-// Роуты регистрациии и входа
+// Роуты регистрациии, входа и выхода
 router.post('/signup', newUserValidator, createUser);
 router.post('/signin', loginValidator, login);
+router.get('/logout', logout);
 
 module.exports = router;

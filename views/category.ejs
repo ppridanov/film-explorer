@@ -7,7 +7,7 @@
         <div class="row popular-container justify-content-center">
             <% data.results.forEach((el, index) => { %>
             <a class="col-lg-2 col-md-3 col-sm-4 col-xs-12 d-flex flex-column m-2 card justify-content-fs align-items-center"
-                href="https://localhost/film/<%= el.id %>"><img
+                href="/film/<%= el.id %>"><img
                     src="https://image.tmdb.org/t/p/w185<%= el.poster_path %>">
                 <p class="text-dark font-weight-bold mt-1 mb-0" style="min-height: 48px;"><%= el.original_title %></p>
                 <p class="text-secondary">

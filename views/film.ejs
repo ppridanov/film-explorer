@@ -1,0 +1,53 @@
+<div class="container">
+    <h3 class="display-4 text-left mt-4"><%= data.filmName %></h3>
+    <hr>
+    <div class="card text-center">
+        <div class="row no-gutters">
+            <div class="col-sm-3">
+                <img src="https://image.tmdb.org/t/p/w185/<%= data.results.poster_path %>" width="85%"
+                    alt="<%= data.results.title%>">
+            </div>
+            <div class="col-sm-7">
+                <div class="card-body text-left">
+                    <p class="card-title"><b>Title:</b> <span class="ml-4"><%= data.results.title%></span></p>
+                    <p class="card-text"><b>Year:</b> <span
+                            class="ml-4"><%= data.results.release_date.substring(4, -4);%></span></p>
+                    <p class="card-title"><b>Genre:</b> <span
+                            class="ml-4"><% data.results.genres.forEach(item => { %><%= item.name %> <% }) %></span></p>
+                    <p class="card-title"><b>Overview:</b> <span class="ml-4"><%= data.results.overview%></span></p>
+                    <p class="card-title"><b>Rating:</b> <span class="ml-4">5</span></p>
+                    <div class="row" style="margin-top:40px;">
+                        <div class="col-md-12">
+                            <div class="well well-sm">
+                                <div class="text-right">
+                                    <a class="btn btn-success btn-green" href="#reviews-anchor"
+                                        id="open-review-box">Leave a Review</a>
+                                </div>
+
+                                <div class="row" id="post-review-box" style="display:none;">
+                                    <div class="col-md-12">
+                                        <form accept-charset="UTF-8" action="" method="post">
+                                            <input id="ratings-hidden" name="rating" type="hidden">
+                                            <textarea class="form-control animated" cols="50" id="new-review"
+                                                name="comment" placeholder="Enter your review here..."
+                                                rows="5"></textarea>
+
+                                            <div class="text-right">
+                                                <div class="stars starrr" data-rating="0"></div>
+                                                <a class="btn btn-danger btn-sm" href="#" id="close-review-box"
+                                                    style="display:none; margin-right: 10px;">
+                                                    <span class="glyphicon glyphicon-remove"></span>Cancel</a>
+                                                <button class="btn btn-success btn-lg" type="submit">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

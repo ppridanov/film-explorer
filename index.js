@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+
 const cors = require('cors');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
@@ -9,7 +10,7 @@ const { requestLogger, errorLogger } = require('./middlewars/logger');
 const limiter = require('./middlewars/limiter');
 const { mongoUrl } = require('./scripts/config');
 const { errHandler, notFoundErrHandler } = require('./middlewars/error-handlers');
-const passport = require('passport');
+
 require('dotenv').config();
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -29,12 +30,8 @@ mongoose.connect(mongoUrl, {
 })
   .catch((err) => console.log(err.message));
 
-
 app.use(requestLogger);
-
 app.use(cookieParser());
-app.use(passport.initialize());
-app.use(passport.session());
 app.use('/', require('./routes/main'));
 
 app.use(errorLogger);

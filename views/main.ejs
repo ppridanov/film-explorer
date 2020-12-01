@@ -7,7 +7,6 @@
 
 <body class="text-center">
     <div class="page">
-        <% console.log(data.userName) %>
         <%- include ('partials/header', {data: { nav: data.nav, isAuth: data.isAuth, name: data.userName }}); %>
         <% if (data.title.includes('HomePage')) { %>
         <%- include ('index', {data: data}); %>
@@ -15,7 +14,10 @@
         <% if (data.title.includes('category')) { %>
         <%- include ('category', {data: data}); %>
         <% } %>
-        <% if (data.title.includes('Accout page')) { %>
+        <% if (data.title.includes('movie')) { %>
+        <%- include ('film', {data: data}); %>
+        <% } %>
+        <% if (data.title.includes('Account')) { %>
         <%- include ('user', {data: data}); %>
         <% } %>
     </div>

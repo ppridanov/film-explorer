@@ -21,7 +21,7 @@ module.exports.newUserValidator = celebrate({
       .label(checkEmailMsg),
     password: Joi.string()
       .required()
-      .min(8)
+      .min(3)
       .pattern(/^[a-zA-Z0-9]{3,30}$/)
       .label(checkPassMsg),
   }),
@@ -36,7 +36,7 @@ module.exports.loginValidator = celebrate({
       .label(checkEmailMsg),
     password: Joi.string()
       .required()
-      .min(8)
+      .min(3)
       .pattern(/^[a-zA-Z0-9]{3,30}$/)
       .label(checkPassMsg),
   }),

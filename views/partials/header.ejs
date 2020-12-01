@@ -11,7 +11,7 @@
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">My account</a>
+                <a class="nav-link" href="/users/me">My account</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/films/popular/1">Popular Films</a>
@@ -33,7 +33,7 @@
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
         </form>
         <form class="form-inline my-1 my-lg-0" action="/logout" method="GET">
-            <a href="#" class="mb-0 mr-1 font-weight-normal">Welcome <%= data.name  %></a>
+            <p class="mb-0 mr-1 font-weight-normal text-white">Welcome, <%= data.name  %></p>
             <button class="ml-2 btn btn-outline-light my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </div>
@@ -116,7 +116,7 @@
                                     role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                                <p class="flash-span"></p>
+                                <div class="flash-span"></div>
                             </div>
                             <button type="click" id="signup-button" class="btn btn-primary btn-lg">Login</button>
                         </form>
@@ -141,7 +141,7 @@
                                     role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                                <p class="flash-span"></p>
+                                <div class="flash-span"></div>
                             </div>
                             <button type="submit" id="signin-button" class="btn btn-danger btn-lg">Login</button>
                         </form>

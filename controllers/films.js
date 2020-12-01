@@ -6,6 +6,10 @@ const {
   notFoundIdMsg,
   accessErrMsg,
 } = require("../scripts/errors-success-msg");
+const { apiKey, partTitle } = require("../scripts/config");
+const { getData } = require("../middlewars/api");
+const { nav } = require("./nav");
+const auth = require("../middlewars/auth");
 
 // Получаем все фильмы пользователя
 module.exports.getAllFilms = (req, res, next) => {
@@ -16,6 +20,24 @@ module.exports.getAllFilms = (req, res, next) => {
     })
     .catch(next);
 };
+
+module.exports.getFilm = async (req, res, next) => {
+  const movieId = req.url.split("/").pop();
+  const url = await `https://api.themoviedb.org/3/movie/${Number(movieId)}?api_key=${apiKey}&language=en-US`;
+  const header = await nav();
+  const user = await auth(req, res, next);
+  const apiResponse = await getData(url);
+  const resData = {
+    isAuth: (!user) ? false : true,
+    userId: user._id,
+    userName: user.name,
+    title: partTitle + apiResponse.title + ' movie',
+    filmName: apiResponse.title,
+    nav: header.genres,
+    results: apiResponse,
+  };
+  res.render('main', {data: resData});
+}
 
 // Создаем фильм
 module.exports.createFilm = (req, res, next) => {

@@ -1,9 +1,11 @@
 const url = require("url");
 const { getData } = require("../middlewars/api");
+const auth = require("../middlewars/auth");
 const { partTitle, discoverUrl } = require("../scripts/config");
 const { nav } = require("./nav");
 
-module.exports.getCategory = async (req, res) => {
+module.exports.getCategory = async (req, res, next) => {
+  const user = await auth(req, res, next);
   const header = await nav();
   const page = req.url.split("/").pop();
   let apiLink = req.data.url ? req.data.url : discoverUrl;
@@ -12,7 +14,6 @@ module.exports.getCategory = async (req, res) => {
   });
   let title = String(partTitle + req.data.name);
   let name = req.data.name;
-  console.log(req.data.name);
   if (req.data.name == "Genre") {
     let genresName = req.url.split("/");
 
@@ -28,7 +29,7 @@ module.exports.getCategory = async (req, res) => {
       genresName.slice(1) +
       " category";
     name = genresName[0].toUpperCase() + genresName.slice(1) + " category";
-    console.log(genresName);
+
     const newLocal = await header.genres.find((item) =>
       item.name.toLowerCase().includes(genresName)
     );
@@ -41,7 +42,9 @@ module.exports.getCategory = async (req, res) => {
 
   const resData = {
     link: req.data.link,
-    isAuth: false,
+    isAuth: (!user) ? false : true,
+    userId: user._id,
+    userName: user.name,
     title: title,
     name: name,
     nav: header.genres,

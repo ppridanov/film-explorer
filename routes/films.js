@@ -1,13 +1,13 @@
 // Переменные
 const router = require('express').Router();
 const { getCategory } = require('../controllers/category');
-const { getAllFilms, createFilm, deleteFilm } = require('../controllers/films');
-const auth = require('../middlewars/auth');
+const { getAllFilms, createFilm, deleteFilm, getFilm} = require('../controllers/films');
 const { filmCreateValidator } = require('../middlewars/validator');
 const { popularUrl } = require('../scripts/config');
 
+
 // Роуты фильмов
-router.get('/films', auth, getAllFilms);
+router.get('/film/:id', getFilm);
 router.use((req, res, next) => {
     req.data = {
         link: 'popular',
@@ -25,7 +25,7 @@ router.use((req, res, next) => {
     next();
 })
 router.get('/films/genre/:genreName/:page', getCategory);
-router.post('/films', auth, filmCreateValidator, createFilm);
-router.delete('/films/:filmId', auth, deleteFilm);
+router.post('/films', filmCreateValidator, createFilm);
+router.delete('/films/:filmId', deleteFilm);
 
 module.exports = router;

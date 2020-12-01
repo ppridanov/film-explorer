@@ -10,6 +10,7 @@ const { NODE_ENV, MONGOOSE_BASEURL } = process.env;
 const mongoUrl = NODE_ENV === 'production' ? MONGOOSE_BASEURL : devMongooseUrl;
 
 module.exports = {
+  apiKey,
   devSecret,
   mongoUrl,
   popularUrl,
