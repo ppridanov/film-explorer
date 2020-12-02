@@ -10,6 +10,8 @@ const { apiKey, partTitle } = require("../scripts/config");
 const { getData } = require("../middlewars/api");
 const { nav } = require("./nav");
 const auth = require("../middlewars/auth");
+const { getComments } = require("./comments");
+
 
 // Получаем все фильмы пользователя
 module.exports.getAllFilms = (req, res, next) => {
@@ -27,6 +29,8 @@ module.exports.getFilm = async (req, res, next) => {
   const header = await nav();
   const user = await auth(req, res, next);
   const apiResponse = await getData(url);
+  const comments = await getComments(movieId);
+  console.log(comments);
   const resData = {
     isAuth: (!user) ? false : true,
     userId: user._id,
@@ -35,6 +39,7 @@ module.exports.getFilm = async (req, res, next) => {
     filmName: apiResponse.title,
     nav: header.genres,
     results: apiResponse,
+    comments: comments
   };
   res.render('main', {data: resData});
 }

@@ -8,46 +8,72 @@
                     alt="<%= data.results.title%>">
             </div>
             <div class="col-sm-7">
-                <div class="card-body text-left">
-                    <p class="card-title"><b>Title:</b> <span class="ml-4"><%= data.results.title%></span></p>
-                    <p class="card-text"><b>Year:</b> <span
-                            class="ml-4"><%= data.results.release_date.substring(4, -4);%></span></p>
-                    <p class="card-title"><b>Genre:</b> <span
-                            class="ml-4"><% data.results.genres.forEach(item => { %><%= item.name %> <% }) %></span></p>
-                    <p class="card-title"><b>Overview:</b> <span class="ml-4"><%= data.results.overview%></span></p>
-                    <p class="card-title"><b>Rating:</b> <span class="ml-4">5</span></p>
-                    <div class="row" style="margin-top:40px;">
-                        <div class="col-md-12">
-                            <div class="well well-sm">
-                                <div class="text-right">
-                                    <a class="btn btn-success btn-green" href="#reviews-anchor"
-                                        id="open-review-box">Leave a Review</a>
-                                </div>
-
-                                <div class="row" id="post-review-box" style="display:none;">
-                                    <div class="col-md-12">
-                                        <form accept-charset="UTF-8" action="" method="post">
-                                            <input id="ratings-hidden" name="rating" type="hidden">
-                                            <textarea class="form-control animated" cols="50" id="new-review"
-                                                name="comment" placeholder="Enter your review here..."
-                                                rows="5"></textarea>
-
-                                            <div class="text-right">
-                                                <div class="stars starrr" data-rating="0"></div>
-                                                <a class="btn btn-danger btn-sm" href="#" id="close-review-box"
-                                                    style="display:none; margin-right: 10px;">
-                                                    <span class="glyphicon glyphicon-remove"></span>Cancel</a>
-                                                <button class="btn btn-success btn-lg" type="submit">Save</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                <table class="table text-left">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Title</th>
+                            <td><%= data.results.title%></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Year</th>
+                            <td><%= data.results.release_date.substring(4, -4);%></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Genre</th>
+                            <td><% data.results.genres.forEach(item => { %><%= item.name %> <% }) %></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Overview</th>
+                            <td><%= data.results.overview%></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Rating</th>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Rate this</th>
+                            <td><input id="input-1-ltr-star-xs" name="input-1-ltr-star-xs"
+                                    class="kv-ltr-theme-uni-star rating-loading" value="1" dir="ltr" data-size="xs">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <h5>Comments</h5>
+    <div class="comments">
+        <% if (data.comments.length != 0) { %>
+        <% data.comments.forEach((el) => { %>
+        <div class="card bg-light mb-3">
+            <div class="card-header text-left"><span class="comment-name"><%= el.author.name %></span> <small
+                    class="text-muted"><%= el.added %></small></div>
+            <div class="card-body">
+                <div class="row no-gutters">
+                    <div class="col-sm-2 text-left">
+                        <img src="/images/default-avatar.png" alt="user avatar">
+                    </div>
+                    <div class="col-sm-10">
+                        <p class="text-left"><%= el.text %></p>
                     </div>
                 </div>
             </div>
         </div>
+        <% }) %>
+        <% } else { %>
+        <div class="comments">
+            <div class="w-100 bg-light m-3 text-black-50">
+                No one comments found. You can be first.
+            </div>
+            <form class="col-sm-8 m-auto">
+                <div class="form-group">
+                    <p class="text-left mb-1">Your comment:</p>
+                    <textarea class="form-control" id="comment" rows="2"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" type="button">Send comment</button>
+            </form>
+        </div>
+        <% } %>
     </div>
+
 </div>
