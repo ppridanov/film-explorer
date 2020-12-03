@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  films: []
 },
 {
   versionKey: false,

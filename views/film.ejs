@@ -4,8 +4,15 @@
     <div class="card text-center film" filmId="<%= data.results.id%>">
         <div class="row no-gutters">
             <div class="col-sm-3">
+
                 <img src="https://image.tmdb.org/t/p/w185/<%= data.results.poster_path %>" width="85%"
                     alt="<%= data.results.title%>">
+                <div class="buttons-block">
+                    <% if (data.isAuth) { %>
+                    <button class="btn btn-outline-secondary like-movie"><img src="/images/like-active.svg" width="20px"
+                            height="20px"> Remove from favorites</button>
+                    <% } %>
+                </div>
             </div>
             <div class="col-sm-7">
                 <table class=" table text-left">
@@ -22,9 +29,10 @@
                             <th scope="row">Genre</th>
                             <td>
                                 <% data.results.genres.forEach(item => { %>
-                                    <a class="btn btn-outline-info btn-sm" href="/films/genre/<%= item.name.toLowerCase() %>/1"
-                                        role="button"><%= item.name %></a>
-    
+                                <a class="btn btn-outline-info btn-sm"
+                                    href="/films/genre/<%= item.name.toLowerCase() %>/1"
+                                    role="button"><%= item.name %></a>
+
                                 <% }) %>
                             </td>
                         </tr>
@@ -38,25 +46,43 @@
                         </tr>
                         <tr>
                             <th scope="row">Rate this</th>
+                            <% if (data.isAuth) { %>
                             <td><input id="input-1-ltr-star-xs" name="input-1-ltr-star-xs"
                                     class="kv-ltr-theme-uni-star rating-loading" value="1" dir="ltr" data-size="xs">
                             </td>
+
+                            <% } else { %>
+                            <td>
+                                Register or sign in to leave a comment
+                                <button class="btn btn-outline-dark btn-sm" data-toggle="modal"
+                                    data-target="#loginModal">Click
+                                    here</button>
+
+                            </td>
+                            <% } %>
                         </tr>
                         <tr>
                             <th scope="row">Tags</th>
                             <td>
-                                <% data.comments.forEach(el => { %>
-                                <% if (el.filmId == data.results.id) { %>
-                                <% if (el.tags && el.tags.length != 0) { %>
-                                <% el.tags.forEach(el => { %>
-                                <a class="btn btn-outline-info btn-sm" href="/search/tags/<%= el.toLowerCase() %>"
-                                    role="button"><%= el %></a>
-                                <% }) %>
+                                <% console.log(data.comment) %>
+                                <% if (data.comments != undefined) { %>
+                                    <% data.comments.forEach(el => { %>
+                                        <% if (el.filmId == data.results.id) { %>
+                                            <% if (el.tags && el.tags.length != 0) { %>
+                                                <% el.tags.forEach(el => { %>
+                                                    <% if (el != '') { %>
+                                                    <a class="btn btn-outline-info btn-sm" href="/search/tags/<%= el.toLowerCase() %>"
+                                                        role="button"><%= el %></a>
+                                                    <% } %>
+                                                <% }) %>
+                                            <% } else { %>
+                                            None
+                                            <% } %>
+                                        <% } %>
+                                    <% }) %>
                                 <% } else { %>
                                 None
                                 <% } %>
-                                <% } %>
-                                <% }) %>
                             </td>
                         </tr>
                     </tbody>
@@ -91,7 +117,7 @@
         </div>
         <% } else { %>
         <div class="alert alert-warning col-12 text-center" role="alert">
-            Register or log in to leave a comment
+            Register or sign in to leave a comment
             <button class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#loginModal">Click
                 here</button>
         </div>

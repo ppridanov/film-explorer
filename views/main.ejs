@@ -11,7 +11,7 @@
         <% if (data.title.includes('HomePage')) { %>
         <%- include ('index', {data: data}); %>
         <% } %>
-        <% if (data.title.includes('category')) { %>
+        <% if (data.title.includes('category') || data.title.includes('Tag') || data.title.includes('Search')) { %>
         <%- include ('category', {data: data}); %>
         <% } %>
         <% if (data.title.includes('movie')) { %>
@@ -19,9 +19,6 @@
         <% } %>
         <% if (data.title.includes('Account')) { %>
         <%- include ('user', {data: data}); %>
-        <% } %>
-        <% if (data.title.includes('Tag')) { %>
-        <%- include ('category', {data: data}); %>
         <% } %>
     </div>
 </body>

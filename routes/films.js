@@ -11,7 +11,7 @@ router.get('/film/:id', getFilm);
 router.use((req, res, next) => {
     req.data = {
         link: 'popular',
-        name: 'Popular category',
+        name: 'Popular',
         url: popularUrl,
     }
     next();
@@ -19,7 +19,7 @@ router.use((req, res, next) => {
 router.get('/films/popular/:page', getCategory);
 router.use((req, res, next) => {
     req.data = {
-        link: 'popular',
+        link: 'genre',
         name: 'Genre',
     }
     next();

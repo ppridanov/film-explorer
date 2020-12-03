@@ -47,13 +47,13 @@ module.exports.getMovieByTags = async (req, res, next) => {
     filmsArray.push(el.filmId);
   });
   const moviesArray = await this.getMovie(filmsArray);
-  const resData = {
-    isAuth: !user ? false : true,
-    userId: user._id,
-    userName: user.name,
-    title: title,
-    nav: header.genres,
+  const data = {
+    link: req.data.link,
     results: moviesArray,
+    pages: 0,
+    name: tagName,
+    title: title,
+    page: typeof page !== "undefined" ? page : 1,
   };
-  return await res.render("main", { data: resData });
+  return data;
 };

@@ -96,8 +96,9 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.logout = (req, res, next) => {
+    console.log(req.url);
     res.clearCookie('jwt');
-    res.redirect('/');
+    res.redirect('back');
 }
 
 // Получить своего пользователя
@@ -127,5 +128,26 @@ module.exports.getAccountPage = async (req, res, next) => {
         res.redirect('/');
     } else {
         return await res.render("main", { data: resData });
+    }
+}
+
+module.exports.addFilmToUser = async (req, res, next) => {
+        const user = await auth(req, res, next);
+        user.films.push(Number(req.body.filmId));
+        user.save();
+}
+
+module.exports.deleteFilmFromUser = async (req, res, next) => {
+    const user = await auth(req, res, next);
+    if (user.films.find((i) => i === Number(req.body.filmId))) {
+        user.films.pull(Number(req.body.filmId));
+        user.save();
+        res
+        .status(200)
+        .send('Success delete movie from user');
+    } else {
+        res
+        .status(404)
+        .send(`Not found movie with this ID`);
     }
 }
