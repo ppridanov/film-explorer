@@ -1,14 +1,14 @@
 <div class="container">
     <h3 class="display-4 text-left mt-4"><%= data.filmName %></h3>
     <hr>
-    <div class="card text-center">
+    <div class="card text-center film" filmId="<%= data.results.id%>">
         <div class="row no-gutters">
             <div class="col-sm-3">
                 <img src="https://image.tmdb.org/t/p/w185/<%= data.results.poster_path %>" width="85%"
                     alt="<%= data.results.title%>">
             </div>
             <div class="col-sm-7">
-                <table class="table text-left">
+                <table class=" table text-left">
                     <tbody>
                         <tr>
                             <th scope="row">Title</th>
@@ -20,7 +20,13 @@
                         </tr>
                         <tr>
                             <th scope="row">Genre</th>
-                            <td><% data.results.genres.forEach(item => { %><%= item.name %> <% }) %></td>
+                            <td>
+                                <% data.results.genres.forEach(item => { %>
+                                    <a class="btn btn-outline-info btn-sm" href="/films/genre/<%= item.name.toLowerCase() %>/1"
+                                        role="button"><%= item.name %></a>
+    
+                                <% }) %>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">Overview</th>
@@ -36,14 +42,60 @@
                                     class="kv-ltr-theme-uni-star rating-loading" value="1" dir="ltr" data-size="xs">
                             </td>
                         </tr>
+                        <tr>
+                            <th scope="row">Tags</th>
+                            <td>
+                                <% data.comments.forEach(el => { %>
+                                <% if (el.filmId == data.results.id) { %>
+                                <% if (el.tags && el.tags.length != 0) { %>
+                                <% el.tags.forEach(el => { %>
+                                <a class="btn btn-outline-info btn-sm" href="/search/tags/<%= el.toLowerCase() %>"
+                                    role="button"><%= el %></a>
+                                <% }) %>
+                                <% } else { %>
+                                None
+                                <% } %>
+                                <% } %>
+                                <% }) %>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <h5>Comments</h5>
+
     <div class="comments">
+        <h3 class="display-5 text-left">Comments</h3>
+        <hr>
         <% if (data.comments.length != 0) { %>
+        <% if (data.isAuth) { %>
+        <a data-toggle="collapse" class="btn btn-primary btn-sm text-left" href="#collapseExample" role="button"
+            aria-expanded="false" aria-controls="collapseExample">
+            Leave comment
+        </a>
+        <div class="collapse" id="collapseExample">
+            <form class="col-sm-8 mb-3 mt-3 p-0">
+                <div class="form-group">
+                    <p class="text-left mb-1">Your comment:</p>
+                    <textarea class="form-control" id="comment" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="tag-comment">Add tags to the movie separated by commas.</label>
+                    <input type="text" class="form-control" id="tag-comment"
+                        placeholder="Good film, Test, Interested Movie">
+                </div>
+                <button type="button" id="send-comment" class="btn btn-primary btn-sm" type="button">Send
+                    comment</button>
+            </form>
+        </div>
+        <% } else { %>
+        <div class="alert alert-warning col-12 text-center" role="alert">
+            Register or log in to leave a comment
+            <button class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#loginModal">Click
+                here</button>
+        </div>
+        <% } %>
         <% data.comments.forEach((el) => { %>
         <div class="card bg-light mb-3">
             <div class="card-header text-left"><span class="comment-name"><%= el.author.name %></span> <small
@@ -61,19 +113,35 @@
         </div>
         <% }) %>
         <% } else { %>
-        <div class="comments">
-            <div class="w-100 bg-light m-3 text-black-50">
-                No one comments found. You can be first.
-            </div>
-            <form class="col-sm-8 m-auto">
+        <% if (data.isAuth) {%>
+        <div class="bg-light text-black-50 d-flex flex-column justify-content-center align-items-center"
+            style="min-height: 200px">
+            <p>No one comments found. You can be first</p>
+            <form class="col-sm-8 mb-3 mt-3 p-0">
                 <div class="form-group">
                     <p class="text-left mb-1">Your comment:</p>
                     <textarea class="form-control" id="comment" rows="2"></textarea>
                 </div>
-                <button type="button" class="btn btn-primary btn-sm" type="button">Send comment</button>
+                <div class="form-group">
+                    <label for="tag-comment">Add tags to the movie separated by commas.</label>
+                    <input type="text" class="form-control" id="tag-comment"
+                        placeholder="Put here tags for film separated by commas">
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" id="send-comment" type="button">Send
+                    comment</button>
             </form>
+        </div>
+        <% } else { %>
+        <div class="bg-light text-black-50 d-flex flex-column justify-content-center align-items-center"
+            style="min-height: 120px">
+            <p>No one comments found. You can be first if you signin/signup.</p>
+            <button class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#loginModal">Click
+                here</button>
+
         </div>
         <% } %>
     </div>
+    <% } %>
+</div>
 
 </div>

@@ -52,8 +52,7 @@ module.exports.createUser = (req, res, next) => {
                             sameSite: true,
                         })
                         .send({
-                            message: userJoinMsg,
-                            jwt: token,
+                            message: userCreatedMsg,
                         })
                         .end();
                 } catch (err) {

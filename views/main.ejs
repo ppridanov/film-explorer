@@ -5,7 +5,7 @@
     <%- include ('partials/head', {title: data.title}); %>
 </head>
 
-<body class="text-center">
+<body>
     <div class="page">
         <%- include ('partials/header', {data: { nav: data.nav, isAuth: data.isAuth, name: data.userName }}); %>
         <% if (data.title.includes('HomePage')) { %>
@@ -19,6 +19,9 @@
         <% } %>
         <% if (data.title.includes('Account')) { %>
         <%- include ('user', {data: data}); %>
+        <% } %>
+        <% if (data.title.includes('Tag')) { %>
+        <%- include ('category', {data: data}); %>
         <% } %>
     </div>
 </body>

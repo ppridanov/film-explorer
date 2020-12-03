@@ -30,7 +30,6 @@ module.exports.getFilm = async (req, res, next) => {
   const user = await auth(req, res, next);
   const apiResponse = await getData(url);
   const comments = await getComments(movieId);
-  console.log(comments);
   const resData = {
     isAuth: (!user) ? false : true,
     userId: user._id,
