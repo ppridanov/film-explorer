@@ -12,13 +12,12 @@ module.exports.postComment = async (req, res, next) => {
       id: userData.id,
       url: `/users/${userData.id}`
     }
-    const { filmId, text, tags } = req.body;
+    const { filmId, text } = req.body;
     Comment.create(
       {
         filmId,
         author,
         text,
-        tags,
       },
       (err, comment) => {
         try {

@@ -132,9 +132,12 @@ module.exports.getAccountPage = async (req, res, next) => {
 }
 
 module.exports.addFilmToUser = async (req, res, next) => {
-        const user = await auth(req, res, next);
+    const user = await auth(req, res, next);
+    if (user.films.indexOf(req.body.filmId) == -1) {
         user.films.push(Number(req.body.filmId));
         user.save();
+    }
+    console.log(user);
 }
 
 module.exports.deleteFilmFromUser = async (req, res, next) => {
@@ -142,12 +145,13 @@ module.exports.deleteFilmFromUser = async (req, res, next) => {
     if (user.films.find((i) => i === Number(req.body.filmId))) {
         user.films.pull(Number(req.body.filmId));
         user.save();
+        console.log(user);
         res
-        .status(200)
-        .send('Success delete movie from user');
+            .status(200)
+            .send('Success delete movie from user');
     } else {
         res
-        .status(404)
-        .send(`Not found movie with this ID`);
+            .status(404)
+            .send(`Not found movie with this ID`);
     }
 }

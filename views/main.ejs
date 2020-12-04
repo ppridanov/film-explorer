@@ -15,7 +15,7 @@
         <%- include ('category', {data: data}); %>
         <% } %>
         <% if (data.title.includes('movie')) { %>
-        <%- include ('film', {data: data}); %>
+        <%- include ('film', {data: data}, {async: true}); %>
         <% } %>
         <% if (data.title.includes('Account')) { %>
         <%- include ('user', {data: data}); %>

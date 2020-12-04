@@ -9,12 +9,16 @@ const popularContainer = document.querySelector(".popular-container");
 const commentInput = (!null) ? document.querySelector("#comment") : null;
 const tagsInput = (!null) ? document.querySelector("#tag-comment") : null;
 const sendCommentButton = (!null) ? document.querySelector("#send-comment") : null;
+const likeFilmButton = document.querySelector('.like-movie');
+const unLikeFilmButton = document.querySelector('.unlike-movie');
+const filmId = document.querySelector('.film').getAttribute('filmId');
 
+const sendTagButton = document.querySelector('#send-tags');
+const tagInput = document.querySelector('#tag-input');
 function sendData(data, link) {
   $(".flash-span").text("");
   $.ajax({
     type: "POST",
-    data: JSON.stringify(data),
     contentType: "application/json",
     url: `http://localhost:3000/${link}`,
     data: JSON.stringify(data),
@@ -43,7 +47,7 @@ function sendData(data, link) {
   });
 }
 
-function sendComment(data, link) {
+function sendCommentOrTag(data, link) {
   $.ajax({
     type: "POST",
     data: JSON.stringify(data),
@@ -51,7 +55,12 @@ function sendComment(data, link) {
     url: `http://localhost:3000/${link}`,
     data: JSON.stringify(data),
     success: function (data) {
-      location.reload();
+      $('.close-tag-modal').trigger('click');
+      document.querySelector('.tagForm').reset();
+      document.querySelector('.comment-form').reset();
+      setTimeout(() => {
+        location.reload('');
+      }, 500)
     },
     error: (err) => {
       console.log(err);
@@ -59,6 +68,32 @@ function sendComment(data, link) {
   })
 }
 
+function addToCollection(id) {
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    url: `http://localhost:3000/users/movie/add`,
+    data: JSON.stringify({filmId: id}),
+    success: function (data) {
+    },
+    error: (err) => {
+      console.log(err);
+    },
+  })
+}
+function removeFromCollection(id) {
+  $.ajax({
+    type: "DELETE",
+    contentType: "application/json",
+    url: `http://localhost:3000/users/movie/delete`,
+    data: JSON.stringify({filmId: id}),
+    success: function (data) {
+    },
+    error: (err) => {
+      console.log(err);
+    },
+  })
+}
 signinButton.addEventListener("click", (e) => {
   e.preventDefault();
   emailInput = signinForm.querySelector("#email-input");
@@ -85,21 +120,37 @@ signupButton.addEventListener("click", (e) => {
   let link = "signup";
   sendData(data, link);
 });
-sendCommentButton.addEventListener('click', (e) => {
+if (sendCommentButton) {
+  sendCommentButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const data = {
+      filmId: filmId,
+      text: commentInput.value,
+    }
+    const link = 'comments'
+    sendCommentOrTag(data, link);
+
+  })
+
+}
+sendTagButton.addEventListener('click', (e) => {
   e.preventDefault();
-  const filmId = document.querySelector('.film').getAttribute('filmId');
-  console.log(filmId)
-  const tagsArray = tagsInput.value.toLowerCase().split(", ");
+  const link = 'tags/add'
   const data = {
-    filmId: filmId,
-    text: commentInput.value,
-    tags: tagsArray,
+    filmId:  filmId,
+    tags: tagInput.value.split(','),
   }
   console.log(data);
-  const link = 'comments'
-  sendComment(data, link);
-  
+  sendCommentOrTag(data, link)
 })
+// unLikeFilmButton.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   addToCollection(filmId);
+// } )
+likeFilmButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  removeFromCollection(filmId);
+} )
 
 $(document).ready(function () {
   $(".kv-ltr-theme-uni-star").rating({

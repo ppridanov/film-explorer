@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const commentSchema = new mongoose.Schema(
+const tagSchema = new mongoose.Schema(
   {
     filmId: {
       type: Number,
@@ -16,21 +16,17 @@ const commentSchema = new mongoose.Schema(
         required: true,
       },
     },
-    text: {
-      type: String,
-      required: true,
-    },
     added: {
         type: Date,
         default: Date.now
     },
-    answers: [
-        comments = []
-    ],
+    tags: {
+        type: [String]
+    }
   },
   {
     versionKey: false,
   }
 );
 
-module.exports = mongoose.model("comment", commentSchema);
+module.exports = mongoose.model("tag", tagSchema);

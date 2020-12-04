@@ -11,6 +11,7 @@ const { getData } = require("../middlewars/api");
 const { nav } = require("./nav");
 const auth = require("../middlewars/auth");
 const { getComments } = require("./comments");
+const { renderTags } = require("./tags");
 
 
 // Получаем все фильмы пользователя
@@ -29,16 +30,18 @@ module.exports.getFilm = async (req, res, next) => {
   const header = await nav();
   const user = await auth(req, res, next);
   const apiResponse = await getData(url);
-  const comments = await getComments(movieId);
+  const resComments = await getComments(movieId);
+  const resTags = await renderTags(req, res, next);
   const resData = {
     isAuth: (!user) ? false : true,
+    tags: (resTags) ? resTags.tags : undefined,
     userId: user._id,
     userName: user.name,
     title: partTitle + apiResponse.title + ' movie',
     filmName: apiResponse.title,
     nav: header.genres,
     results: apiResponse,
-    comments: comments
+    comments: resComments
   };
   res.render('main', {data: resData});
 }
