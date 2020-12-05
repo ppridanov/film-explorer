@@ -37,6 +37,7 @@ module.exports.getFilm = async (req, res, next) => {
     tags: (resTags) ? resTags.tags : undefined,
     userId: user._id,
     userName: user.name,
+    userFilms: user.films,
     title: partTitle + apiResponse.title + ' movie',
     filmName: apiResponse.title,
     nav: header.genres,
@@ -89,4 +90,17 @@ module.exports.deleteFilm = (req, res, next) => {
         .catch(next);
     })
     .catch(next);
+};
+
+module.exports.getMovieById = async (array) => {
+  const moviesArray = await getMovie(array);
+  const data = {
+    link: req.data.link,
+    results: moviesArray,
+    pages: 0,
+    name: tagName,
+    title: title,
+    page: typeof page !== "undefined" ? page : 1,
+  };
+  return data;
 };

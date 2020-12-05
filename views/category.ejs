@@ -4,7 +4,7 @@
     <div class="container">
         <h3 class="display-4 text-left"><%= data.name %></h3>
         <hr>
-        <div class="row popular-container justify-content-center">
+        <div class="row popular-container">
             <% data.results.forEach((el, index) => { %>
             <a class="col-lg-2 col-md-3 col-sm-4 col-xs-12 d-flex flex-column m-2 card justify-content-fs align-items-center"
                 href="/film/<%= el.id %>"><img src="https://image.tmdb.org/t/p/w185<%= el.poster_path %>">

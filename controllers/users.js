@@ -14,6 +14,7 @@ const {
 const { devSecret, partTitle } = require('../scripts/config');
 const auth = require('../middlewars/auth');
 const { nav } = require('./nav');
+const { getMovie } = require('../middlewars/api');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -117,12 +118,16 @@ module.exports.getAccountPage = async (req, res, next) => {
     const user = await auth(req, res, next);
     const title = partTitle + 'Account Page';
     const header = await nav();
+    const moviesArray = await getMovie(user.films);
+
     const resData = {
         isAuth: (!user) ? false : true,
         userId: user._id,
         userName: user.name,
+        userFilms: user.films,
         title: title,
         nav: header.genres,
+        results: moviesArray,
     };
     if (!resData.isAuth) {
         res.redirect('/');
@@ -136,6 +141,7 @@ module.exports.addFilmToUser = async (req, res, next) => {
     if (user.films.indexOf(req.body.filmId) == -1) {
         user.films.push(Number(req.body.filmId));
         user.save();
+        console.log(user);
         res
             .status(200)
             .send('Success add movie from user');

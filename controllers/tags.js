@@ -1,9 +1,9 @@
-const { getData } = require("../middlewars/api");
+const { getMovie } = require("../middlewars/api");
 const auth = require("../middlewars/auth");
 const Tag = require("../models/tag");
 const user = require("../models/user");
-const { apiKey, partTitle } = require("../scripts/config");;
-const { nav } = require("./nav");
+const { partTitle } = require("../scripts/config");;
+
 
 module.exports.addTags = async (req, res, next) => {
   const tags = req.body.tags.filter(String);
@@ -13,12 +13,11 @@ module.exports.addTags = async (req, res, next) => {
     name: userData.name,
     url: '/users/' + userData.id
   }
-  console.log(userData)
   if (userData) {
     const tag = await Tag.findOne({
       filmId: filmId
     });
-    if (tag && tag.tags.length != 0) {
+    if (tag != null && tag.tags.length != 0) {
       tags.forEach(el => {
         if (tag.tags.indexOf(el) === -1) {
           tag.tags.push(el)
@@ -36,7 +35,7 @@ module.exports.addTags = async (req, res, next) => {
         return data;
       })
     }
-    res.send({ message: 'Added tags', tags: tag.tags })
+    res.send({ message: 'Added tags', tags: tags})
   } else {
     res
       .status(500)
@@ -45,7 +44,7 @@ module.exports.addTags = async (req, res, next) => {
 }
 
 module.exports.renderTags = async (req, res, next) => {
-  const filmId = await req.url.split("/").pop().replaceAll('%20', ' ');
+  const filmId = await req.url.split("/").pop().replace('%20', ' ');
   const result = await Tag.findOne({
     filmId
   }, (err, data) => {
@@ -56,7 +55,7 @@ module.exports.renderTags = async (req, res, next) => {
 }
 
 module.exports.getTags = async (req, res, next) => {
-  const tagName = await req.url.split("/").pop().replaceAll('%20', ' ');
+  const tagName = await req.url.split("/").pop().replace('%20', ' ');
   return await Tag.find(
     {
       tags: { $in: tagName },
@@ -73,28 +72,15 @@ module.exports.getTags = async (req, res, next) => {
   );
 };
 
-module.exports.getMovie = async (filmIds) => {
-  const results = [];
-  for (let filmId of filmIds) {
-    const movie = await getData(
-      `https://api.themoviedb.org/3/movie/${filmId}?api_key=${apiKey}&language=en-US`
-    );
-    await results.push(movie);
-  }
-  return results;
-};
-
-module.exports.getMovieByTags = async (req, res, next) => {
+module.exports.renderMoviesByTags = async (req, res, next) => {
   const filmsArray = [];
-  const tagName = await req.url.split("/").pop().replaceAll("%20", " ");
+  const tagName = await req.url.split("/").pop().replace("%20", " ");
   const title = partTitle + "TagName: " + tagName;
   const commentArray = await this.getTags(req, res, next);
-  const user = await auth(req, res, next);
-  const header = await nav();
   await commentArray.forEach((el) => {
     filmsArray.push(el.filmId);
   });
-  const moviesArray = await this.getMovie(filmsArray);
+  const moviesArray = await getMovie(filmsArray);
   const data = {
     link: req.data.link,
     results: moviesArray,

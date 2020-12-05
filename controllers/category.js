@@ -2,10 +2,11 @@ const url = require("url");
 const { getData } = require("../middlewars/api");
 const auth = require("../middlewars/auth");
 const { partTitle, discoverUrl } = require("../scripts/config");
+const { getMovieById } = require("./films");
 const { renderGenres } = require("./genre");
 const { nav } = require("./nav");
 const { searchMovie } = require("./search");
-const { getMovieByTags } = require("./tags");
+const { renderMoviesByTags } = require("./tags");
 
 module.exports.getCategory = async (req, res, next) => {
   const user = await auth(req, res, next);
@@ -36,7 +37,7 @@ module.exports.getCategory = async (req, res, next) => {
     data = await searchMovie(req, res, next);
   }
   if (req.data.name == "Tag") {
-    data = await getMovieByTags(req, res, next);
+    data = await renderMoviesByTags(req, res, next);
   }
 
   data.isAuth = (!user) ? false : true;

@@ -9,8 +9,7 @@ const popularContainer = document.querySelector(".popular-container");
 const commentInput = (!null) ? document.querySelector("#comment") : null;
 const tagsInput = (!null) ? document.querySelector("#tag-comment") : null;
 const sendCommentButton = (!null) ? document.querySelector("#send-comment") : null;
-const likeFilmButton = document.querySelector('.like-movie');
-const unLikeFilmButton = document.querySelector('.unlike-movie');
+const unLikeFilmButton = document.querySelector('.unliked-movie');
 const filmId = document.querySelector('.film').getAttribute('filmId');
 
 const sendTagButton = document.querySelector('#send-tags');
@@ -73,21 +72,30 @@ function addToCollection(id) {
     type: "POST",
     contentType: "application/json",
     url: `http://localhost:3000/users/movie/add`,
-    data: JSON.stringify({filmId: id}),
+    data: JSON.stringify({ filmId: id }),
     success: function (data) {
+      $('.unliked-movie').css('display', 'none');
+      $('.liked-movie').css('display', 'inline-block');
+      console.log(data);
     },
     error: (err) => {
       console.log(err);
     },
   })
 }
-function removeFromCollection(id) {
+function removeFromCollection(id, event) {
+  const cardsContainer = document.querySelector('.collection');
   $.ajax({
     type: "DELETE",
     contentType: "application/json",
     url: 'http://localhost:3000/users/movie/delete',
-    data: JSON.stringify({filmId: id}),
+    data: JSON.stringify({ filmId: id }),
     success: function (data) {
+      $('.liked-movie').css('display', 'none');
+      $('.unliked-movie').css('display', 'inline-block');
+      if (location.href.includes('/users/me')) {
+        location.reload('');
+      }
       console.log(data);
     },
     error: (err) => {
@@ -134,24 +142,30 @@ if (sendCommentButton) {
   })
 
 }
-sendTagButton.addEventListener('click', (e) => {
+if (sendTagButton) {
+  sendTagButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const link = 'tags/add'
+    const data = {
+      filmId: filmId,
+      tags: tagInput.value.split(','),
+    }
+    console.log(data);
+    sendCommentOrTag(data, link)
+  })
+}
+
+document.addEventListener("click", (e) => {
   e.preventDefault();
-  const link = 'tags/add'
-  const data = {
-    filmId:  filmId,
-    tags: tagInput.value.split(','),
+  if (e.target.closest('.liked-movie')) {
+    if (confirm('Are u seriously delete movie from your collection?'))
+      removeFromCollection(filmId, e);
   }
-  console.log(data);
-  sendCommentOrTag(data, link)
+  if (e.target.closest('.unliked-movie')) {
+    addToCollection(filmId);
+  }
 })
-// unLikeFilmButton.addEventListener("click", (e) => {
-//   e.preventDefault();
-//   addToCollection(filmId);
-// } )
-likeFilmButton.addEventListener("click", (e) => {
-  e.preventDefault();
-  removeFromCollection(filmId);
-} )
+
 
 $(document).ready(function () {
   $(".kv-ltr-theme-uni-star").rating({
