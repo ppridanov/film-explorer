@@ -85,9 +85,10 @@ function removeFromCollection(id) {
   $.ajax({
     type: "DELETE",
     contentType: "application/json",
-    url: `http://localhost:3000/users/movie/delete`,
+    url: 'http://localhost:3000/users/movie/delete',
     data: JSON.stringify({filmId: id}),
     success: function (data) {
+      console.log(data);
     },
     error: (err) => {
       console.log(err);

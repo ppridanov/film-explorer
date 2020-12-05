@@ -37,9 +37,6 @@
     "validator": "^13.1.17",
     "winston": "^3.3.3"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.6"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ppridanov/film-explorer.git"
@@ -47,5 +44,8 @@
   "bugs": {
     "url": "https://github.com/ppridanov/film-explorer/issues"
   },
-  "homepage": "https://github.com/ppridanov/film-explorer#readme"
+  "homepage": "https://github.com/ppridanov/film-explorer#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
 }

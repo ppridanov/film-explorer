@@ -136,8 +136,14 @@ module.exports.addFilmToUser = async (req, res, next) => {
     if (user.films.indexOf(req.body.filmId) == -1) {
         user.films.push(Number(req.body.filmId));
         user.save();
+        res
+            .status(200)
+            .send('Success add movie from user');
+    } else {
+        res
+            .status(400)
+            .send(`Movie already exist`);
     }
-    console.log(user);
 }
 
 module.exports.deleteFilmFromUser = async (req, res, next) => {
