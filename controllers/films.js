@@ -1,5 +1,6 @@
 // Переменные
 const Film = require("../models/film");
+const Rating = require("../models/rating");
 const NotFoundError = require("../errors/not-found-error");
 const AccessError = require("../errors/access-error");
 const {
@@ -13,7 +14,6 @@ const auth = require("../middlewars/auth");
 const { getComments } = require("./comments");
 const { renderTags } = require("./tags");
 
-
 // Получаем все фильмы пользователя
 module.exports.getAllFilms = (req, res, next) => {
   const ownerId = req.user._id;
@@ -26,26 +26,28 @@ module.exports.getAllFilms = (req, res, next) => {
 
 module.exports.getFilm = async (req, res, next) => {
   const movieId = req.url.split("/").pop();
-  const url = await `https://api.themoviedb.org/3/movie/${Number(movieId)}?api_key=${apiKey}&language=en-US`;
+  const url = await `https://api.themoviedb.org/3/movie/${Number(
+    movieId
+  )}?api_key=${apiKey}&language=en-US`;
   const header = await nav();
   const user = await auth(req, res, next);
   const apiResponse = await getData(url);
   const resComments = await getComments(movieId);
   const resTags = await renderTags(req, res, next);
   const resData = {
-    isAuth: (!user) ? false : true,
-    tags: (resTags) ? resTags.tags : undefined,
+    isAuth: !user ? false : true,
+    tags: resTags ? resTags.tags : undefined,
     userId: user._id,
     userName: user.name,
     userFilms: user.films,
-    title: partTitle + apiResponse.title + ' movie',
+    title: partTitle + apiResponse.title + " movie",
     filmName: apiResponse.title,
     nav: header.genres,
     results: apiResponse,
-    comments: resComments
+    comments: resComments,
   };
-  res.render('main', {data: resData});
-}
+  res.render("main", { data: resData });
+};
 
 // Создаем фильм
 module.exports.createFilm = (req, res, next) => {
@@ -103,4 +105,56 @@ module.exports.getMovieById = async (array) => {
     page: typeof page !== "undefined" ? page : 1,
   };
   return data;
+};
+
+module.exports.rateMovie = async (req, res, next) => {
+  const user = await auth(req, res, next);
+  if (user) {
+    Rating.findOne(
+      {
+        filmId: req.body.filmId,
+      },
+      (err, rating) => {
+        if (rating != null) {
+          if (rating.userId.indexOf(user._id) == -1) {
+            rating.userId.push(user._id);
+            rating.count = ++rating.count;
+            rating.value = rating.value + req.body.value;
+            rating.save();
+          } else {
+            console.log('user are voted')
+            throw new Error('Looks like u are voted');
+          }
+        } else {
+          Rating.create(
+            {
+              filmId: req.body.filmId,
+              userId: user._id,
+              value: req.body.value,
+            },
+            (err, rating) => {
+              if (err) {
+                console.log(err);
+                next();
+              }
+            }
+          );
+        }
+        console.log(rating);
+      }
+    );
+    // Rating.create({
+    //   filmId: req.body.filmId,
+    //   userId: user._id,
+    //   value: req.body.value
+    // }, (err, rating) => {
+    //   if (err) {
+    //     console.log(err);
+    //     next();
+    //   }
+    //   console.log(rating)
+    // })
+  } else {
+    console.log("Not authorized");
+  }
 };

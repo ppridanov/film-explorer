@@ -1,7 +1,7 @@
 // Переменные
 const router = require('express').Router();
 const { getCategory } = require('../controllers/category');
-const { getAllFilms, createFilm, deleteFilm, getFilm} = require('../controllers/films');
+const { getAllFilms, createFilm, deleteFilm, getFilm, rateMovie} = require('../controllers/films');
 const { filmCreateValidator } = require('../middlewars/validator');
 const { popularUrl } = require('../scripts/config');
 
@@ -26,6 +26,7 @@ router.use((req, res, next) => {
 })
 router.get('/films/genre/:genreName/:page', getCategory);
 router.post('/films', filmCreateValidator, createFilm);
+router.post('/film/:id', rateMovie);
 router.delete('/films/:filmId', deleteFilm);
 
 module.exports = router;
