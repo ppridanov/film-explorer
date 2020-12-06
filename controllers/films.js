@@ -120,10 +120,11 @@ module.exports.rateMovie = async (req, res, next) => {
             rating.userId.push(user._id);
             rating.count = ++rating.count;
             rating.value = rating.value + req.body.value;
+            rating.average = rating.value / rating.count
+            rating.average = rating.average.toFixed(1);
             rating.save();
           } else {
             console.log('user are voted')
-            throw new Error('Looks like u are voted');
           }
         } else {
           Rating.create(
@@ -140,7 +141,6 @@ module.exports.rateMovie = async (req, res, next) => {
             }
           );
         }
-        console.log(rating);
       }
     );
     // Rating.create({

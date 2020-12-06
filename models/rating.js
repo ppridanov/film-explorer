@@ -14,6 +14,9 @@ const ratingSchema = new mongoose.Schema(
     count: {
         type: Number,
         default: 1
+    },
+    average: {
+        type: Number
     }
   },
   {
