@@ -26,7 +26,7 @@ router.use((req, res, next) => {
 })
 router.get('/films/genre/:genreName/:page', getCategory);
 router.post('/films', filmCreateValidator, createFilm);
-router.post('/film/:id', rateMovie);
+router.post('/film/giverating', rateMovie);
 router.delete('/films/:filmId', deleteFilm);
 
 module.exports = router;

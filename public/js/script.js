@@ -6,14 +6,19 @@ const signupForm = document.querySelector("#signupForm");
 let flashSpan = "";
 const genresContainer = document.querySelector(".genres-nav");
 const popularContainer = document.querySelector(".popular-container");
-const commentInput = (!null) ? document.querySelector("#comment") : null;
-const tagsInput = (!null) ? document.querySelector("#tag-comment") : null;
-const sendCommentButton = (!null) ? document.querySelector("#send-comment") : null;
-const unLikeFilmButton = document.querySelector('.unliked-movie');
-const filmId = document.querySelector('.film').getAttribute('filmId');
-
-const sendTagButton = document.querySelector('#send-tags');
-const tagInput = document.querySelector('#tag-input');
+const commentInput = !null ? document.querySelector("#comment") : null;
+const tagsInput = !null ? document.querySelector("#tag-comment") : null;
+const sendCommentButton = !null
+  ? document.querySelector("#send-comment")
+  : null;
+const likeButton = document.querySelector(".liked-movie");
+const unLikeFilmButton = document.querySelector(".unliked-movie");
+const filmId = document.querySelector(".film").getAttribute("filmId");
+const ratingInput = document.querySelector("#input-1-ltr-star-xs");
+const sendTagButton = document.querySelector("#send-tags");
+const tagInput = document.querySelector("#tag-input");
+const ratingButton = document.querySelector(".send-rating");
+const userId = document.querySelector(".user-id");
 function sendData(data, link) {
   $(".flash-span").text("");
   $.ajax({
@@ -54,17 +59,17 @@ function sendCommentOrTag(data, link) {
     url: `http://localhost:3000/${link}`,
     data: JSON.stringify(data),
     success: function (data) {
-      $('.close-tag-modal').trigger('click');
-      document.querySelector('.tagForm').reset();
-      document.querySelector('.comment-form').reset();
+      $(".close-tag-modal").trigger("click");
+      document.querySelector(".tagForm").reset();
+      document.querySelector(".comment-form").reset();
       setTimeout(() => {
-        location.reload('');
-      }, 500)
+        location.reload("");
+      }, 500);
     },
     error: (err) => {
       console.log(err);
     },
-  })
+  });
 }
 
 function addToCollection(id) {
@@ -74,34 +79,49 @@ function addToCollection(id) {
     url: `http://localhost:3000/users/movie/add`,
     data: JSON.stringify({ filmId: id }),
     success: function (data) {
-      $('.unliked-movie').css('display', 'none');
-      $('.liked-movie').css('display', 'inline-block');
+      $(".unliked-movie").css("display", "none");
+      $(".liked-movie").css("display", "inline-block");
       console.log(data);
     },
     error: (err) => {
       console.log(err);
     },
-  })
+  });
 }
 function removeFromCollection(id, event) {
-  const cardsContainer = document.querySelector('.collection');
+  const cardsContainer = document.querySelector(".collection");
   $.ajax({
     type: "DELETE",
     contentType: "application/json",
-    url: 'http://localhost:3000/users/movie/delete',
+    url: "http://localhost:3000/users/movie/delete",
     data: JSON.stringify({ filmId: id }),
     success: function (data) {
-      $('.liked-movie').css('display', 'none');
-      $('.unliked-movie').css('display', 'inline-block');
-      if (location.href.includes('/users/me')) {
-        location.reload('');
+      $(".liked-movie").css("display", "none");
+      $(".unliked-movie").css("display", "inline-block");
+      if (location.href.includes("/users/me")) {
+        location.reload("");
       }
       console.log(data);
     },
     error: (err) => {
       console.log(err);
     },
-  })
+  });
+}
+
+function rateMovie(filmId, value) {
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    url: `http://localhost:3000/film/giverating`,
+    data: JSON.stringify({ filmId: filmId, value: value }),
+    success: function (data) {
+      location.reload();
+    },
+    error: (err) => {
+      console.log(err);
+    },
+  });
 }
 signinButton.addEventListener("click", (e) => {
   e.preventDefault();
@@ -130,42 +150,56 @@ signupButton.addEventListener("click", (e) => {
   sendData(data, link);
 });
 if (sendCommentButton) {
-  sendCommentButton.addEventListener('click', (e) => {
+  sendCommentButton.addEventListener("click", (e) => {
     e.preventDefault();
     const data = {
       filmId: filmId,
       text: commentInput.value,
-    }
-    const link = 'comments'
+    };
+    const link = "comments";
     sendCommentOrTag(data, link);
-
-  })
-
+  });
 }
 if (sendTagButton) {
-  sendTagButton.addEventListener('click', (e) => {
+  sendTagButton.addEventListener("click", (e) => {
     e.preventDefault();
-    const link = 'tags/add'
+    const link = "tags/add";
     const data = {
       filmId: filmId,
-      tags: tagInput.value.split(','),
-    }
+      tags: tagInput.value.split(","),
+    };
     console.log(data);
-    sendCommentOrTag(data, link)
-  })
+    sendCommentOrTag(data, link);
+  });
 }
 
-document.addEventListener("click", (e) => {
+unLikeFilmButton.addEventListener("click", (e) => {
   e.preventDefault();
-  if (e.target.closest('.liked-movie')) {
-    if (confirm('Are u seriously delete movie from your collection?'))
-      removeFromCollection(filmId, e);
-  }
-  if (e.target.closest('.unliked-movie')) {
-    addToCollection(filmId);
-  }
-})
+  addToCollection(filmId);
+});
 
+likeButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  removeFromCollection(filmId, e);
+});
+
+ratingButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  rateMovie(filmId, ratingInput.value)
+})
+// document.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   if (e.target.closest('.liked-movie')) {
+//     if (confirm('Are u seriously delete movie from your collection?'))
+//       removeFromCollection(filmId, e);
+//   }
+//   if (e.target.closest('.unliked-movie')) {
+//     addToCollection(filmId);
+//   }
+//   if (e.target.closest('.send-rating')) {
+//     rateMovie(filmId, ratingInput.value)
+//   }
+// })
 
 $(document).ready(function () {
   $(".kv-ltr-theme-uni-star").rating({

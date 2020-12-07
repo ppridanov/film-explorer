@@ -24,31 +24,6 @@ module.exports.getAllFilms = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.getFilm = async (req, res, next) => {
-  const movieId = req.url.split("/").pop();
-  const url = await `https://api.themoviedb.org/3/movie/${Number(
-    movieId
-  )}?api_key=${apiKey}&language=en-US`;
-  const header = await nav();
-  const user = await auth(req, res, next);
-  const apiResponse = await getData(url);
-  const resComments = await getComments(movieId);
-  const resTags = await renderTags(req, res, next);
-  const resData = {
-    isAuth: !user ? false : true,
-    tags: resTags ? resTags.tags : undefined,
-    userId: user._id,
-    userName: user.name,
-    userFilms: user.films,
-    title: partTitle + apiResponse.title + " movie",
-    filmName: apiResponse.title,
-    nav: header.genres,
-    results: apiResponse,
-    comments: resComments,
-  };
-  res.render("main", { data: resData });
-};
-
 // Создаем фильм
 module.exports.createFilm = (req, res, next) => {
   const { keyword, title, text, date, source, link, image } = req.body;
@@ -120,11 +95,13 @@ module.exports.rateMovie = async (req, res, next) => {
             rating.userId.push(user._id);
             rating.count = ++rating.count;
             rating.value = rating.value + req.body.value;
-            rating.average = rating.value / rating.count
+            rating.average = rating.value / rating.count;
             rating.average = rating.average.toFixed(1);
             rating.save();
+            res.send({ message: "success votin" });
           } else {
-            console.log('user are voted')
+            console.log("user are voted");
+            res.send({ message: "user are voted" });
           }
         } else {
           Rating.create(
@@ -138,6 +115,10 @@ module.exports.rateMovie = async (req, res, next) => {
                 console.log(err);
                 next();
               }
+              rating.average = rating.value / rating.count;
+              rating.average = rating.average.toFixed(1);
+              rating.save();
+              res.send({rating: rating})
             }
           );
         }
@@ -157,4 +138,47 @@ module.exports.rateMovie = async (req, res, next) => {
   } else {
     console.log("Not authorized");
   }
+};
+
+module.exports.getMovieRating = async (filmId) => {
+  const result = await Rating.findOne(
+    {
+      filmId: filmId,
+    },
+    async (err, rating) => {
+      if (rating != null) {
+        return rating.average;
+      } else {
+        return 0;
+      }
+    }
+  );
+  return result;
+};
+
+module.exports.getFilm = async (req, res, next) => {
+  const movieId = req.url.split("/").pop();
+  const url = await `https://api.themoviedb.org/3/movie/${Number(
+    movieId
+  )}?api_key=${apiKey}&language=en-US`;
+  const header = await nav();
+  const user = await auth(req, res, next);
+  const apiResponse = await getData(url);
+  const resComments = await getComments(movieId);
+  const resTags = await renderTags(req, res, next);
+  const resRating = await this.getMovieRating(movieId);
+  const resData = {
+    isAuth: !user ? false : true,
+    tags: resTags ? resTags.tags : undefined,
+    userId: user._id,
+    userName: user.name,
+    userFilms: user.films,
+    title: partTitle + apiResponse.title + " movie",
+    filmName: apiResponse.title,
+    nav: header.genres,
+    results: apiResponse,
+    comments: resComments,
+    rating: resRating,
+  };
+  res.render("main", { data: resData });
 };

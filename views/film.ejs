@@ -12,14 +12,14 @@
                     <% if (data.userFilms.indexOf(data.results.id) == -1) { %>
                     <button class="btn btn-outline-secondary unliked-movie mt-2"><img class="mr-1"
                             src="/images/like-inactive.svg" width="20px" height="20px">Add to favorites</button>
-                    <button class="btn btn-outline-secondary liked-movie mt-2"   style="display: none;"><img class="mr-1"
-                            src="/images/like-active.svg" width="20px" height="20px" > Remove from
+                    <button class="btn btn-outline-secondary liked-movie mt-2" style="display: none;"><img class="mr-1"
+                            src="/images/like-active.svg" width="20px" height="20px"> Remove from
                         favorites</button>
                     <% } else { %>
                     <button class="btn btn-outline-secondary liked-movie mt-2"><img class="mr-1"
                             src="/images/like-active.svg" width="20px" height="20px"> Remove from favorites</button>
-                    <button class="btn btn-outline-secondary unliked-movie mt-2" style="display: none;"><img class="mr-1"
-                            src="/images/like-inactive.svg" width="20px" height="20px" >Add to
+                    <button class="btn btn-outline-secondary unliked-movie mt-2" style="display: none;"><img
+                            class="mr-1" src="/images/like-inactive.svg" width="20px" height="20px">Add to
                         favorites</button>
                     <% } %>
                     <% } %>
@@ -53,18 +53,42 @@
                         </tr>
                         <tr>
                             <th scope="row">Rating</th>
-                            <td>5</td>
+                            <td>
+                                <% if (data.rating == null) { %>
+                                0
+                                <% } else { %>
+                                <%= data.rating.average %>
+                                <% } %>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">Rate this</th>
                             <% if (data.isAuth) { %>
-                            <td><input id="input-1-ltr-star-xs" name="input-1-ltr-star-xs"
-                                    class="kv-ltr-theme-uni-star rating-loading" value="1" dir="ltr" data-size="xs">
+                            <td>
+                                <% if (data.rating != null) { %>
+                                <% if (data.rating.userId.indexOf(data.userId) == -1) { %>
+                                <form class="send-rating d-flex">
+                                    <input id="input-1-ltr-star-xs" name="input-1-ltr-star-xs"
+                                        class="kv-ltr-theme-uni-star rating-loading" value="1" dir="ltr" data-size="xs">
+                                    <button type="buton"
+                                        class="ml-2 btn btn-outline-dark btn-sm send-rating">Vote</button>
+                                </form>
+                                <% } else { %>
+                                You are vote!!!
+                                <% } %>
+                                <% } else { %>
+                                <form class="send-rating d-flex">
+                                    <input id="input-1-ltr-star-xs" name="input-1-ltr-star-xs"
+                                        class="kv-ltr-theme-uni-star rating-loading" value="1" dir="ltr" data-size="xs">
+                                    <button type="buton"
+                                        class="ml-2 btn btn-outline-dark btn-sm send-rating">Vote</button>
+                                </form>
+                                <% } %>
                             </td>
 
                             <% } else { %>
                             <td>
-                                Register or sign in to leave a comment
+                                Register or sign in to set rating
                                 <button class="btn btn-outline-dark btn-sm" data-toggle="modal"
                                     data-target="#loginModal">Click
                                     here</button>
